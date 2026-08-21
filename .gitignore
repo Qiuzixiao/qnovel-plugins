@@ -1,0 +1,8 @@
+node_modules/
+**/node_modules/
+lib/
+**/lib/
+.yarn/
+.pnp.*
+*.log
+.DS_Store

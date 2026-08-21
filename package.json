@@ -1,0 +1,20 @@
+{
+  "name": "qnovel-plugins",
+  "version": "0.1.0",
+  "private": true,
+  "description": "QNovel plugin collection",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "yarn workspace qnovel-mochi build",
+    "typecheck": "yarn workspace qnovel-mochi typecheck",
+    "check": "yarn workspace qnovel-mochi check",
+    "pack:qnovel-mochi": "yarn workspace qnovel-mochi pack"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "packageManager": "yarn@4.18.0"
+}
