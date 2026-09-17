@@ -25,12 +25,18 @@
 
 | 版本 | 适用运行时 |
 | --- | --- |
-| 0.1.0 | 当前桌面端（宿主 0.1.5-rc.1） |
+| 0.1.1 | 当前桌面端（宿主 0.1.5-rc.1） |
 
 ## 开发
 
 ```bash
 corepack yarn workspace zenwit-plugin-screenplay check   # 构建 + 类型检查 + 单元测试
+```
+
+发布前用真实内核校验组合配置（缺必填字段会在挂载预设时才报错，这一步能提前发现）：
+
+```bash
+ZENWIT_KERNEL_MODULES=<内核 node_modules 路径> yarn workspace zenwit-plugin-screenplay verify:composition
 ```
 
 预设内容在 `presets/zenwit-plugin-screenplay/`——技能、参数表与自检脚本都是纯文件，改完即生效；预设组合由 `src/index.ts` 的 `composition()` 生成，路径按实际安装位置写入，所以包放在哪都能用。

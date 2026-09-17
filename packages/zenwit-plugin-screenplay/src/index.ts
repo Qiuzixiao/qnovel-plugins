@@ -97,6 +97,8 @@ export function composition(presetDir: string): string {
     "",
     "- id: tool-fs-search",
     "  name: '@deepseek-ai/dsh-tool-fs-search'",
+    "  config:",
+    "    sampleOverCapGlobResults: false",
     "",
     "- id: tool-bash",
     "  name: '@deepseek-ai/dsh-tool-bash'",
