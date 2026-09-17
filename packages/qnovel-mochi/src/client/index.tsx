@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import type { ClientContext } from '@deepseek-ai/dsh-client-runtime/client'
-import type { ConnectionHandle } from '@deepseek-ai/dsh-client-connection/client'
+import type { Context as ClientContext } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-locale/client'
+// ctx.slots 的 Context 增强由 ui-renderer/client 声明（0.1.0-rc.7 时在 dsh-client-runtime/client）。
+import type {} from '@deepseek-ai/dsh-client-ui-renderer/client'
 import type {} from '@deepseek-ai/dsh-client-ui-layout/client'
 import type {} from '@deepseek-ai/dsh-client-ui-settings/client'
 import type {} from '@deepseek-ai/dsh-client-ui-slots'
@@ -50,12 +51,27 @@ interface RpcFailure {
 
 type RpcResult<T> = RpcSuccess<T> | RpcFailure
 
-const CHANNEL = '/mochi'
+/**
+ * Host 端状态路由（见 src/index.ts 的 STATE_ROUTE）：注册在共享 /api 频道上，
+ * 由 Connection 的 Host/Origin + 浏览器鉴权围栏保护，因此用同源 fetch 调用。
+ */
+const STATE_ROUTE = '/api/qnovel-mochi'
 const SETTINGS_KEY = 'qnovel-mochi-settings'
 
 async function unwrap<T>(response: RpcResult<T>): Promise<T> {
   if (response.ok) return response.value
   throw new Error(response.error.message)
+}
+
+/** 拉取一次 Host 状态快照；非 2xx 抛错，由轮询按“本次失败”吞掉。 */
+async function readState(): Promise<MochiState> {
+  const response = await fetch(STATE_ROUTE, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ endpoint: 'state' }),
+  })
+  if (!response.ok) throw new Error(`Mochi 状态请求失败：${response.status}`)
+  return parseMochiState(await unwrap(await response.json() as RpcResult<unknown>))
 }
 
 function parseMochiState(value: unknown): MochiState {
@@ -509,13 +525,12 @@ function createMochi(hostEl: HTMLElement): MochiEngine {
 // ---------------------------------------------------------------------------
 
 interface MochiProps {
-  connection: ConnectionHandle
   settings: MochiSettings
 }
 
 const SIZE = 68
 
-function Mochi({ connection, settings }: MochiProps): React.ReactElement {
+function Mochi({ settings }: MochiProps): React.ReactElement {
   const rootRef = useRef<HTMLDivElement>(null)
   const bodyRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<MochiEngine | null>(null)
@@ -569,7 +584,7 @@ function Mochi({ connection, settings }: MochiProps): React.ReactElement {
 
     const poll = async (): Promise<void> => {
       try {
-        const s = parseMochiState(await unwrap(await connection.rpc.call(CHANNEL, 'state', {})))
+        const s = await readState()
         const eng = engineRef.current
         if (eng === null) return
         if (!autoRef.current) {
@@ -624,7 +639,7 @@ function Mochi({ connection, settings }: MochiProps): React.ReactElement {
       engine.destroy()
       engineRef.current = null
     }
-  }, [connection])
+  }, [])
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>): void => {
     if (e.button === 2) return
@@ -791,10 +806,10 @@ function Mochi({ connection, settings }: MochiProps): React.ReactElement {
 // 挂载点
 // ---------------------------------------------------------------------------
 
-function MochiRoot({ connection }: { connection: ConnectionHandle }): React.ReactElement | null {
+function MochiRoot(): React.ReactElement | null {
   const settings = useSettings()
   if (!settings.enabled) return null
-  return <Mochi connection={connection} settings={settings} />
+  return <Mochi settings={settings} />
 }
 
 function MochiSettingsRow(): React.ReactElement {
@@ -842,11 +857,9 @@ function MochiSettingsRow(): React.ReactElement {
 // 插件入口
 // ---------------------------------------------------------------------------
 
-export const inject = ['slots', 'connection']
+export const inject = ['slots']
 
-type MochiClientContext = ClientContext & { connection: ConnectionHandle }
-
-export function apply(ctx: MochiClientContext): void {
+export function apply(ctx: ClientContext): void {
   // These QNovel runtime slots are present in every supported desktop build,
   // while their declaration modules vary across upstream rc releases.
   const slots = ctx.slots as unknown as MochiSlots
@@ -861,7 +874,7 @@ export function apply(ctx: MochiClientContext): void {
   slots.inject('shell.overlay', () =>
     slots.register(
       { name: 'shell.overlay', id: 'qnovel-mochi', order: 100 },
-      () => <MochiRoot connection={ctx.connection} />,
+      () => <MochiRoot />,
     ),
   )
 

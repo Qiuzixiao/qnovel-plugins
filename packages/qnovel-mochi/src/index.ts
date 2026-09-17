@@ -103,6 +103,16 @@ function failure(error: unknown): RpcFailure {
   }
 }
 
+/** 共享 /api 频道上本插件独占的状态路由（精确路径，位于 Connection 的鉴权围栏之下）。 */
+const STATE_ROUTE = '/api/qnovel-mochi'
+
+function jsonResponse(body: RpcSuccess<unknown> | RpcFailure): Response {
+  return new Response(JSON.stringify(body), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+  })
+}
+
 export function apply(ctx: Context): void {
   const runtime = ctx as RuntimeEventContext
   const state: MochiState = { mood: 'idle', label: '', step: '', seq: 0 }
@@ -149,23 +159,36 @@ export function apply(ctx: Context): void {
     bump()
   })
 
-  // 动态插件用 `harness.handle`，正式插件改用 `connection.rpc` 暴露 Client→Host 调用。
+  // Client→Host 状态桥。
+  //
+  // 0.1.5-rc.1 起第三方 Host 插件不能再用 connection.rpc.handle() 自建 RPC 频道：
+  // HostConnectionService.register() 在服务自身的上下文上读取 ctx.webServer，而该上下文
+  // 没有 webServer 注入，Loader 装载时即报 cannot get property "webServer" without inject。
+  // 改为在进程已挂载的共享 /api 频道上注册一条精确路由：它同样经过 Connection 的
+  // Host/Origin 与浏览器鉴权围栏（未通过时 401/403），路由与响应体由本插件独占。
   ctx.effect(
     () =>
-      ctx.connection.rpc.handle(
-        '/mochi',
-        async (endpoint: string): Promise<RpcSuccess<unknown> | RpcFailure> => {
+      ctx.connection.fetch.register({
+        path: STATE_ROUTE,
+        methods: ['POST'],
+        requestBody: 'buffered',
+        async fetch(request: Request): Promise<Response> {
+          let endpoint = ''
+          try {
+            endpoint = stringField(await request.json(), 'endpoint') ?? ''
+          } catch {
+            // 空体或非 JSON 请求体按未知操作处理，走下面的失败分支。
+          }
           try {
             if (endpoint === 'state') {
-              return success({ ...state })
+              return jsonResponse(success({ ...state }))
             }
             throw new Error(`未知的宠物操作：${endpoint}`)
           } catch (error: unknown) {
-            return failure(error)
+            return jsonResponse(failure(error))
           }
         },
-        { authority: 'loopback' },
-      ),
-    'qnovel-mochi: state rpc',
+      }),
+    'qnovel-mochi: state route',
   )
 }
