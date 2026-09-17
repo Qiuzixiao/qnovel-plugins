@@ -1,6 +1,6 @@
 {
   "name": "zenwit-plugin-screenplay",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "短剧创作：以情绪账务引擎为方法论内核，从立项选题、人物骨架、分集大纲、正文写作到付费卡点、改稿验收与交付的完整短剧创作流水线。",
   "publishConfig": {
     "access": "public",

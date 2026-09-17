@@ -1,61 +1,60 @@
-/** 组合生成的纯函数测试：只断言结构约束，不依赖 YAML 解析器。 */
+/** 组合派生的纯函数测试：不依赖内核，用与上游同形的最小夹具。 */
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { composition } from '../lib/index.js'
+import { buildPreset } from '../lib/index.js'
 
-/** 组合允许出现的插件行——运行时自带的那些，出现别的说明引了第三方包。 */
-const ALLOWED = new Set([
-  '@deepseek-ai/dsh-persona',
-  '@deepseek-ai/dsh-tool-fs',
-  '@deepseek-ai/dsh-tool-fs-search',
-  '@deepseek-ai/dsh-tool-bash',
-  '@deepseek-ai/dsh-tool-pwsh',
-  '@deepseek-ai/dsh-tool-web',
-  '@deepseek-ai/dsh-tool-ask-user',
-  '@deepseek-ai/dsh-skill-filesystem',
-  '@deepseek-ai/dsh-tool-skill',
-])
+/** 最小上游夹具：顶层行 persona / tool-fs / skill-filesystem / compaction（含组内子行）。 */
+const UPSTREAM = [
+  '- id: persona',
+  "  name: '@deepseek-ai/dsh-persona'",
+  '  config:',
+  '    suffix: Your working directory is {{cwd}}.',
+  '    prefix: >-',
+  '      You are a coding agent powered by the {{model}} model.',
+  '',
+  '- id: tool-fs',
+  "  name: '@deepseek-ai/dsh-tool-fs'",
+  '',
+  '- id: skill-filesystem',
+  "  name: '@deepseek-ai/dsh-skill-filesystem'",
+  '',
+  '- id: compaction',
+  '  name: cordis:group',
+  '  group: true',
+  '  isolate:',
+  '    compaction: true',
+  '  config:',
+  '    - id: command-compact',
+  "      name: '@deepseek-ai/dsh-command-compact'",
+  '',
+].join(String.fromCharCode(10))
 
-test('组合只引用运行时自带的插件行', () => {
-  const names = [...composition('/tmp/p').matchAll(/^\s*name: '([^']+)'/gmu)].map(match => match[1])
-  assert.equal(names.length, ALLOWED.size)
-  for (const value of names) assert.ok(ALLOWED.has(value), `未在允许集合内: ${String(value)}`)
-})
-
-test('组合的 id 唯一', () => {
-  const ids = [...composition('/tmp/p').matchAll(/^- id: (.+)$/gmu)].map(match => match[1])
-  assert.equal(new Set(ids).size, ids.length)
-})
-
-test('技能目录与自检脚本指向传入的预设目录', () => {
-  const text = composition('/x/y')
-  assert.match(text, /customSkillDirs:\n\s+- \/x\/y\/skills/u)
-  assert.match(text, /\/x\/y\/tools\/format-check\.sh/u)
-})
-
-/**
- * 运行时对各行的必填配置——漏一个，挂载预设时 zod 校验就会整条失败。
- * 与内核同步：`@deepseek-ai/dsh-persona` 的 prefix、`@deepseek-ai/dsh-tool-fs-search` 的
- * sampleOverCapGlobResults（见内核各包 src 里的 .required()）。
+/** 顶层行 id 列表。
+ * @param {string} text - 组合文本。
+ * @returns {string[]} id 列表。
  */
-const REQUIRED_CONFIG = {
-  '@deepseek-ai/dsh-persona': ['prefix'],
-  '@deepseek-ai/dsh-tool-fs-search': ['sampleOverCapGlobResults'],
-}
+const rowIds = (text) => [...text.matchAll(/^- id: (.+)$/gmu)].map(match => match[1])
 
-test('每行的必填配置都给了值', () => {
-  const blocks = composition('/tmp/p').split('\n- id: ')
-  for (const [pkg, keys] of Object.entries(REQUIRED_CONFIG)) {
-    const block = blocks.find(entry => entry.includes(`name: '${pkg}'`))
-    assert.ok(block !== undefined, `${pkg} 行缺失`)
-    for (const key of keys) {
-      assert.match(String(block), new RegExp(`\\n\\s+${key}:`), `${pkg} 缺少必填配置 ${key}`)
-    }
-  }
+test('派生后保留上游的能力行与组内子行', () => {
+  const out = buildPreset(UPSTREAM, '/tmp/p')
+  assert.deepEqual(rowIds(out), ['persona', 'tool-fs', 'skill-filesystem', 'compaction'])
+  assert.match(out, /dsh-command-compact/u)
+  assert.match(out, /^ {2}group: true$/mu)
 })
 
-test('persona 前缀被完整写入块标量', () => {
-  const text = composition('/tmp/p')
-  assert.match(text, /\n    prefix: \|-\n      You are a short-drama writing Agent/u)
-  assert.match(text, /\n    suffix: >-\n/u)
+test('persona 换成短剧创作，上游文案不再出现', () => {
+  const out = buildPreset(UPSTREAM, '/tmp/p')
+  assert.match(out, /You are a short-drama writing Agent/u)
+  assert.doesNotMatch(out, /You are a coding agent powered by/u)
+  assert.match(out, /当前工作目录是 \{\{cwd\}\}/u)
+})
+
+test('技能目录指向传入的预设目录', () => {
+  const out = buildPreset(UPSTREAM, '/x/y')
+  assert.match(out, /customSkillDirs:\n {6}- \/x\/y\/skills/u)
+})
+
+test('上游缺必需行时报错，不产出缺能力的组合', () => {
+  const missing = UPSTREAM.replace('- id: compaction', '- id: something-else')
+  assert.throws(() => buildPreset(missing, '/tmp/p'), /缺少 compaction/u)
 })
