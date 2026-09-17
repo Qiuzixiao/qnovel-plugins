@@ -1,0 +1,5 @@
+# QNovel Screenplay 的 Host 端注册层。
+# 通过 package.json 的 `dsh.bundle.patch` 引用，把 host 插件插入 Host composition。
+- insert:
+    - id: qnovel-screenplay
+      name: qnovel-screenplay

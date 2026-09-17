@@ -1,0 +1,69 @@
+{
+  "name": "qnovel-screenplay",
+  "version": "0.1.0",
+  "description": "短剧创作 Agent 预设：把「短剧创作」预设与技能安装进 DSH，覆盖立项选题、人物骨架、分集大纲、正文写作、付费卡点、改稿验收与交付。",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qiuzixiao/qnovel-plugins.git",
+    "directory": "packages/qnovel-screenplay"
+  },
+  "homepage": "https://github.com/Qiuzixiao/qnovel-plugins/tree/main/packages/qnovel-screenplay",
+  "keywords": [
+    "qnovel",
+    "qnovel-plugin",
+    "screenplay",
+    "short-drama",
+    "agent-preset"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "cordis.patch.yml",
+    "lib/**/*.js",
+    "lib/**/*.map",
+    "lib/types/**/*.d.ts",
+    "presets/**",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "build": "tsdown && tsc -p tsconfig.json --emitDeclarationOnly",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check": "yarn run build && yarn run typecheck"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.2",
+    "@types/node": "^22.20.0",
+    "tsdown": "^0.22.2",
+    "typescript": "^5.9.3"
+  }
+}

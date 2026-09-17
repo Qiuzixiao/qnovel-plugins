@@ -8,10 +8,11 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspace qnovel-mochi build",
-    "typecheck": "yarn workspace qnovel-mochi typecheck",
-    "check": "yarn workspace qnovel-mochi check",
-    "pack:qnovel-mochi": "yarn workspace qnovel-mochi pack"
+    "build": "yarn workspace qnovel-mochi build && yarn workspace qnovel-screenplay build",
+    "typecheck": "yarn workspace qnovel-mochi typecheck && yarn workspace qnovel-screenplay typecheck",
+    "check": "yarn workspace qnovel-mochi check && yarn workspace qnovel-screenplay check",
+    "pack:qnovel-mochi": "yarn workspace qnovel-mochi pack",
+    "pack:qnovel-screenplay": "yarn workspace qnovel-screenplay pack"
   },
   "engines": {
     "node": ">=22.19.0"
