@@ -1,6 +1,6 @@
-# QNovel Plugins
+# Zenwit Plugins
 
-QNovel 插件源码仓库。这里存放插件的源代码、构建配置、说明文档和发布所需的 npm 包元数据。
+Zenwit 插件源码仓库。这里存放插件的源代码、构建配置、说明文档和发布所需的 npm 包元数据。
 
 ## 仓库和市场的关系
 
@@ -12,9 +12,9 @@ GitHub qnovel-plugins
         │  保存源代码、文档和版本变更
         ▼
 npm qiuzixiao 发布的插件包
-        │  QNovel Desktop 安装实际使用的包
+        │  Zenwit 桌面端安装实际使用的包
         ▼
-QNovel / DSH Community Market 的目录卡片
+插件市场的目录卡片
         │  展示插件信息，并指向精确的 npm 包和版本
         ▼
 用户确认安装
@@ -32,9 +32,9 @@ QNovel / DSH Community Market 的目录卡片
 
 ```text
 qnovel-plugins/
-├── packages/                 # 每个目录都是一个独立的 npm/QNovel 插件包
-│   └── qnovel-mochi/         # 当前已有的桌面创作伙伴插件
-│       ├── package.json      # npm 身份、版本和 DSH bundle 声明
+├── packages/                 # 每个目录都是一个独立的 npm/Zenwit 插件包
+│   └── zenwit-plugin-mochi/         # 当前已有的桌面创作伙伴插件
+│       ├── package.json      # npm 身份、版本与宿主声明
 │       ├── README.md         # 插件功能、结构和安装说明
 │       ├── cordis.patch.yml  # Host 插件注册层
 │       ├── src/              # Host 和 Client 源代码
@@ -47,14 +47,14 @@ qnovel-plugins/
 
 ### 为什么使用 `packages/`
 
-`packages/` 只是一个清晰的容器名，表示“这个仓库里有多个可以独立发布的包”。它不是 DSH 规定的插件目录，也不是用户安装后的运行目录。
+`packages/` 只是一个清晰的容器名，表示“这个仓库里有多个可以独立发布的包”。它不是运行时规定的插件目录，也不是用户安装后的运行目录。
 
 这样组织后，新增插件只需要新增一个目录：
 
 ```text
 packages/
-├── qnovel-mochi/
-├── qnovel-writing-tools/
+├── zenwit-plugin-mochi/
+├── zenwit-plugin-screenplay/
 └── another-plugin/
 ```
 
@@ -62,14 +62,14 @@ packages/
 
 ## 当前插件
 
-- [`packages/qnovel-mochi`](packages/qnovel-mochi/)：Mochi 桌面创作伙伴插件。
+- [`packages/zenwit-plugin-mochi`](packages/zenwit-plugin-mochi/)：Mochi 桌面创作伙伴插件。
 
 ## 添加一个新插件
 
 1. 在 `packages/` 下创建一个新的插件目录。
-2. 在该目录创建独立的 `package.json`，其中的 `name` 必须是最终发布到 npm 的包名。
-3. 添加 DSH 所需的 Host/Client 代码、`cordis.patch.yml`、构建配置和 README。
-4. 在插件自己的 `package.json` 中声明 `dsh.client`、`dsh.bundle`、`files`、`repository` 和 `homepage`。
+2. 在该目录创建独立的 `package.json`，其中的 `name` 必须是最终发布到 npm 的包名，且必须符合 [包命名规范](./CONTRIBUTING.md#包命名规范市场硬要求)：`zenwit-plugin-<用途>`。
+3. 添加插件所需的 Host/Client 代码、`cordis.patch.yml`、构建配置和 README。
+4. 在插件自己的 `package.json` 中声明清单字段（`dsh.client`、`dsh.bundle`）、`files`、`repository` 和 `homepage`。
 5. 在根 README 的“当前插件”中增加入口。
 6. 发布新版本时，只修改该插件自己的版本号；不要把所有插件绑成一个 npm 包。
 
@@ -79,18 +79,18 @@ packages/
 
 ```bash
 corepack yarn install
-corepack yarn workspace qnovel-mochi build
-corepack yarn workspace qnovel-mochi typecheck
+corepack yarn workspace zenwit-plugin-mochi build
+corepack yarn workspace zenwit-plugin-mochi typecheck
 ```
 
 ## 发布到 npm
 
-GitHub 仓库和 npm 是两个位置，二者都需要保留：GitHub 用来协作和提供源码链接，npm 用来让 DSH 安装构建后的包。
+GitHub 仓库和 npm 是两个位置，二者都需要保留：GitHub 用来协作和提供源码链接，npm 用来提供用户实际安装的包。
 
 进入具体插件目录发布，不发布仓库根目录：
 
 ```bash
-cd packages/qnovel-mochi
+cd packages/zenwit-plugin-mochi
 corepack yarn build
 npm pack --dry-run
 npm publish --access public
@@ -101,4 +101,4 @@ npm publish --access public
 - 插件自己的 `package.json` 版本号已更新；
 - `repository.directory` 和 `homepage` 指向当前 GitHub 子目录；
 - `files` 只包含构建后的 `lib/`、`cordis.patch.yml`、README 和许可证；
-- 发布成功后，再把对应的精确 npm 版本写入 QNovel Market 的目录数据。
+- 发布成功后，再把对应的精确 npm 版本写入 Zenwit 插件市场的目录数据。

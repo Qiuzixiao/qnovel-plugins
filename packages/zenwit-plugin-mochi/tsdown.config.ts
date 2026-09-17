@@ -1,6 +1,6 @@
 import { defineConfig } from 'tsdown'
 
-const PACKAGE_NAME = 'qnovel-mochi'
+const PACKAGE_NAME = 'zenwit-plugin-mochi'
 
 export default defineConfig([
   {

@@ -2,7 +2,7 @@ import type { Context } from '@deepseek-ai/cordis'
 import type {} from '@deepseek-ai/dsh-client-connection'
 
 /**
- * QNovel Mochi —— Host 端
+ * Mochi —— Host 端
  *
  * 职责：监听当前会话 Agent 的状态事件，维护一个 { mood, label, step } 状态，
  * 通过 `connection.rpc` 暴露给 Client 端轮询（对应动态插件的 `harness.handle`）。
@@ -15,7 +15,7 @@ import type {} from '@deepseek-ai/dsh-client-connection'
  *   tools/result          -> busy + step（每一步工具调用，更新步骤文案）
  */
 
-export const name = 'qnovel-mochi'
+export const name = 'zenwit-plugin-mochi'
 export const inject = ['connection']
 
 /** Client 轮询拿到的状态快照。 */
@@ -36,7 +36,7 @@ interface RpcFailure {
   error: { code: 'internal'; message: string; details: Record<string, never> }
 }
 
-// QNovel Desktop emits these runtime events through the Host composition.
+// The desktop runtime emits these events through the Host composition.
 // They are intentionally not part of Cordis' base Events declaration.
 type RuntimeEventContext = Context & {
   on(event: string, listener: (...args: unknown[]) => void): void
@@ -104,7 +104,7 @@ function failure(error: unknown): RpcFailure {
 }
 
 /** 共享 /api 频道上本插件独占的状态路由（精确路径，位于 Connection 的鉴权围栏之下）。 */
-const STATE_ROUTE = '/api/qnovel-mochi'
+const STATE_ROUTE = '/api/zenwit-plugin-mochi'
 
 function jsonResponse(body: RpcSuccess<unknown> | RpcFailure): Response {
   return new Response(JSON.stringify(body), {
@@ -189,6 +189,6 @@ export function apply(ctx: Context): void {
           }
         },
       }),
-    'qnovel-mochi: state route',
+    'zenwit-plugin-mochi: state route',
   )
 }

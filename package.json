@@ -2,17 +2,17 @@
   "name": "qnovel-plugins",
   "version": "0.1.0",
   "private": true,
-  "description": "QNovel plugin collection",
+  "description": "Zenwit plugin collection",
   "type": "module",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspace qnovel-mochi build && yarn workspace qnovel-screenplay build",
-    "typecheck": "yarn workspace qnovel-mochi typecheck && yarn workspace qnovel-screenplay typecheck",
-    "check": "yarn workspace qnovel-mochi check && yarn workspace qnovel-screenplay check",
-    "pack:qnovel-mochi": "yarn workspace qnovel-mochi pack",
-    "pack:qnovel-screenplay": "yarn workspace qnovel-screenplay pack"
+    "build": "yarn workspace zenwit-plugin-mochi build && yarn workspace zenwit-plugin-screenplay build",
+    "typecheck": "yarn workspace zenwit-plugin-mochi typecheck && yarn workspace zenwit-plugin-screenplay typecheck",
+    "check": "yarn workspace zenwit-plugin-mochi check && yarn workspace zenwit-plugin-screenplay check",
+    "pack:zenwit-plugin-mochi": "yarn workspace zenwit-plugin-mochi pack",
+    "pack:zenwit-plugin-screenplay": "yarn workspace zenwit-plugin-screenplay pack"
   },
   "engines": {
     "node": ">=22.19.0"

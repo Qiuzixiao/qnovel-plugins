@@ -20,7 +20,7 @@ interface MochiSlots {
 }
 
 /**
- * QNovel Mochi —— Client 端
+ * Mochi —— Client 端
  *
  * 职责：渲染可拖拽的悬浮表情球，轮询 Host 端状态自动跟随，并注册
  * 「shell.overlay」宠物本体 + 「settings.general.item」设置行。
@@ -55,8 +55,8 @@ type RpcResult<T> = RpcSuccess<T> | RpcFailure
  * Host 端状态路由（见 src/index.ts 的 STATE_ROUTE）：注册在共享 /api 频道上，
  * 由 Connection 的 Host/Origin + 浏览器鉴权围栏保护，因此用同源 fetch 调用。
  */
-const STATE_ROUTE = '/api/qnovel-mochi'
-const SETTINGS_KEY = 'qnovel-mochi-settings'
+const STATE_ROUTE = '/api/zenwit-plugin-mochi'
+const SETTINGS_KEY = 'zenwit-plugin-mochi-settings'
 
 async function unwrap<T>(response: RpcResult<T>): Promise<T> {
   if (response.ok) return response.value
@@ -545,8 +545,8 @@ function Mochi({ settings }: MochiProps): React.ReactElement {
     let x = 0
     let y = 0
     try {
-      x = Number.parseFloat(localStorage.getItem('qnovel-mochi-x') ?? '') || 0
-      y = Number.parseFloat(localStorage.getItem('qnovel-mochi-y') ?? '') || 0
+      x = Number.parseFloat(localStorage.getItem('zenwit-plugin-mochi-x') ?? '') || 0
+      y = Number.parseFloat(localStorage.getItem('zenwit-plugin-mochi-y') ?? '') || 0
     } catch {
       // ignore
     }
@@ -694,8 +694,8 @@ function Mochi({ settings }: MochiProps): React.ReactElement {
           setPos({ x: nx, y: ny })
         }
         try {
-          localStorage.setItem('qnovel-mochi-x', String(Math.round(Number.parseFloat(rootRef.current?.style.left ?? '') || pos.x)))
-          localStorage.setItem('qnovel-mochi-y', String(Math.round(Number.parseFloat(rootRef.current?.style.top ?? '') || pos.y)))
+          localStorage.setItem('zenwit-plugin-mochi-x', String(Math.round(Number.parseFloat(rootRef.current?.style.left ?? '') || pos.x)))
+          localStorage.setItem('zenwit-plugin-mochi-y', String(Math.round(Number.parseFloat(rootRef.current?.style.top ?? '') || pos.y)))
         } catch {
           // ignore
         }
@@ -748,8 +748,8 @@ function Mochi({ settings }: MochiProps): React.ReactElement {
     }
     setMenuOpen(false)
     try {
-      localStorage.removeItem('qnovel-mochi-x')
-      localStorage.removeItem('qnovel-mochi-y')
+      localStorage.removeItem('zenwit-plugin-mochi-x')
+      localStorage.removeItem('zenwit-plugin-mochi-y')
     } catch {
       // ignore
     }
@@ -774,28 +774,28 @@ function Mochi({ settings }: MochiProps): React.ReactElement {
       onContextMenu={onContextMenu}
     >
       {bubbleText !== '' && (
-        <div className={`qnovel-mochi-bubble${bubbleFade ? ' qnovel-mochi-bubble-fade' : ''}`}>{bubbleText}</div>
+        <div className={`zenwit-plugin-mochi-bubble${bubbleFade ? ' zenwit-plugin-mochi-bubble-fade' : ''}`}>{bubbleText}</div>
       )}
       <div ref={bodyRef} style={{ width: '100%', height: '100%', filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.18))' }} />
       {menuOpen && (
         <div
-          className="qnovel-mochi-menu"
+          className="zenwit-plugin-mochi-menu"
           onPointerDown={(e) => e.stopPropagation()}
           onContextMenu={(e) => e.stopPropagation()}
         >
-          <button type="button" className="qnovel-mochi-menu-item" onClick={toggleAuto}>
+          <button type="button" className="zenwit-plugin-mochi-menu-item" onClick={toggleAuto}>
             {auto ? '✓ 自动跟随状态' : '自动跟随状态（关）'}
           </button>
-          <div className="qnovel-mochi-sep" />
+          <div className="zenwit-plugin-mochi-sep" />
           {MOODS.map((m) => (
-            <button key={m.id} type="button" className="qnovel-mochi-menu-item" onClick={() => pickMood(m.id)}>
-              <span className="qnovel-mochi-dot" style={{ background: m.color }} />
+            <button key={m.id} type="button" className="zenwit-plugin-mochi-menu-item" onClick={() => pickMood(m.id)}>
+              <span className="zenwit-plugin-mochi-dot" style={{ background: m.color }} />
               {m.name}
             </button>
           ))}
-          <div className="qnovel-mochi-sep" />
-          <button type="button" className="qnovel-mochi-menu-item" onClick={resetPos}>复位位置</button>
-          <button type="button" className="qnovel-mochi-menu-item qnovel-mochi-menu-item-danger" onClick={closeMochi}>关闭宠物</button>
+          <div className="zenwit-plugin-mochi-sep" />
+          <button type="button" className="zenwit-plugin-mochi-menu-item" onClick={resetPos}>复位位置</button>
+          <button type="button" className="zenwit-plugin-mochi-menu-item zenwit-plugin-mochi-menu-item-danger" onClick={closeMochi}>关闭宠物</button>
         </div>
       )}
     </div>
@@ -821,27 +821,27 @@ function MochiSettingsRow(): React.ReactElement {
   ]
 
   return (
-    <div className="qnovel-mochi-setting">
-      <div className="qnovel-mochi-setting-row">
-        <span className="qnovel-mochi-setting-label">Mochi 创作伙伴</span>
+    <div className="zenwit-plugin-mochi-setting">
+      <div className="zenwit-plugin-mochi-setting-row">
+        <span className="zenwit-plugin-mochi-setting-label">Mochi 创作伙伴</span>
         <button
           type="button"
-          className={`qnovel-mochi-toggle${settings.enabled ? ' qnovel-mochi-toggle-on' : ''}`}
+          className={`zenwit-plugin-mochi-toggle${settings.enabled ? ' zenwit-plugin-mochi-toggle-on' : ''}`}
           role="switch"
           aria-checked={settings.enabled}
           onClick={() => updateSettings({ enabled: !settings.enabled })}
         >
-          <span className="qnovel-mochi-toggle-knob" />
+          <span className="zenwit-plugin-mochi-toggle-knob" />
         </button>
       </div>
-      <div className="qnovel-mochi-setting-row">
-        <span className="qnovel-mochi-setting-label">创作进度气泡</span>
-        <div className="qnovel-mochi-mode">
+      <div className="zenwit-plugin-mochi-setting-row">
+        <span className="zenwit-plugin-mochi-setting-label">创作进度气泡</span>
+        <div className="zenwit-plugin-mochi-mode">
           {modes.map((m) => (
             <button
               key={m.id}
               type="button"
-              className={`qnovel-mochi-mode-item${settings.bubbleMode === m.id ? ' qnovel-mochi-mode-item-active' : ''}`}
+              className={`zenwit-plugin-mochi-mode-item${settings.bubbleMode === m.id ? ' zenwit-plugin-mochi-mode-item-active' : ''}`}
               onClick={() => updateSettings({ bubbleMode: m.id })}
             >
               {m.label}
@@ -860,27 +860,27 @@ function MochiSettingsRow(): React.ReactElement {
 export const inject = ['slots']
 
 export function apply(ctx: ClientContext): void {
-  // These QNovel runtime slots are present in every supported desktop build,
+  // These runtime slots are present in every supported desktop build,
   // while their declaration modules vary across upstream rc releases.
   const slots = ctx.slots as unknown as MochiSlots
   // 样式：styles 由构建工具内联，见 tsdown.config.ts / styles.ts
   const styleTag = document.createElement('style')
-  styleTag.dataset.plugin = 'qnovel-mochi'
+  styleTag.dataset.plugin = 'zenwit-plugin-mochi'
   styleTag.textContent = styles
   document.head.append(styleTag)
 
-  ctx.effect(() => () => { styleTag.remove() }, 'qnovel-mochi: styles')
+  ctx.effect(() => () => { styleTag.remove() }, 'zenwit-plugin-mochi: styles')
 
   slots.inject('shell.overlay', () =>
     slots.register(
-      { name: 'shell.overlay', id: 'qnovel-mochi', order: 100 },
+      { name: 'shell.overlay', id: 'zenwit-plugin-mochi', order: 100 },
       () => <MochiRoot />,
     ),
   )
 
   slots.inject('settings.general.item', () =>
     slots.register(
-      { name: 'settings.general.item', id: 'qnovel-mochi', order: 30 },
+      { name: 'settings.general.item', id: 'zenwit-plugin-mochi', order: 30 },
       () => <MochiSettingsRow />,
     ),
   )

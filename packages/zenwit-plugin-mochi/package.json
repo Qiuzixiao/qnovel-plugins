@@ -1,7 +1,7 @@
 {
-  "name": "qnovel-mochi",
+  "name": "zenwit-plugin-mochi",
   "version": "0.1.1",
-  "description": "Mochi 是陪伴 QNovel 创作过程的桌面伙伴：跟随写作状态、显示当前步骤，并支持拖拽和个性化设置。",
+  "description": "Mochi：常驻工作区的创作伙伴。跟随写作节奏变换表情，用头顶气泡提示当前进度，可拖拽、可记忆位置。",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -9,12 +9,12 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Qiuzixiao/qnovel-plugins.git",
-    "directory": "packages/qnovel-mochi"
+    "directory": "packages/zenwit-plugin-mochi"
   },
-  "homepage": "https://github.com/Qiuzixiao/qnovel-plugins/tree/main/packages/qnovel-mochi",
+  "homepage": "https://github.com/Qiuzixiao/qnovel-plugins/tree/main/packages/zenwit-plugin-mochi",
   "keywords": [
-    "qnovel",
-    "qnovel-plugin",
+    "zenwit",
+    "zenwit-plugin",
     "writing-companion",
     "desktop-pet",
     "mochi"
