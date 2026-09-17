@@ -113,6 +113,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@deepseek-ai/dsh-home-paths@npm:0.1.5-rc.1":
+  version: 0.1.5-rc.1
+  resolution: "@deepseek-ai/dsh-home-paths@npm:0.1.5-rc.1"
+  peerDependencies:
+    "@deepseek-ai/cordis": ^4.0.2
+  checksum: 10c0/7f24c8c86096d2a6d192d158fdaeff2b2ec44811e68ff74d0e88d9cc16d5465c7c2941063bd8622ac7939dd1d895fa1cf6ad35e4dfda6feca1f6c0073228d12c
+  languageName: node
+  linkType: hard
+
 "@deepseek-ai/schemastery@npm:^3.18.2":
   version: 3.18.2
   resolution: "@deepseek-ai/schemastery@npm:3.18.2"
@@ -582,71 +591,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qnovel-mochi@workspace:packages/qnovel-mochi":
-  version: 0.0.0-use.local
-  resolution: "qnovel-mochi@workspace:packages/qnovel-mochi"
-  dependencies:
-    "@deepseek-ai/cordis": "npm:4.0.2"
-    "@deepseek-ai/dsh-client-connection": "npm:0.1.5-rc.1"
-    "@deepseek-ai/dsh-client-locale": "npm:0.1.5-rc.1"
-    "@deepseek-ai/dsh-client-ui-layout": "npm:0.1.5-rc.1"
-    "@deepseek-ai/dsh-client-ui-renderer": "npm:0.1.5-rc.1"
-    "@deepseek-ai/dsh-client-ui-settings": "npm:0.1.5-rc.1"
-    "@deepseek-ai/dsh-client-ui-slots": "npm:0.1.5-rc.1"
-    "@types/node": "npm:^22.20.0"
-    "@types/react": "npm:^18.3.1"
-    "@types/react-dom": "npm:^18.3.1"
-    react: "npm:18.3.1"
-    react-dom: "npm:18.3.1"
-    tsdown: "npm:^0.22.2"
-    typescript: "npm:^5.9.3"
-  peerDependencies:
-    "@deepseek-ai/cordis": ^4.0.2
-    "@deepseek-ai/dsh-client-connection": ^0.1.5-rc.1
-    "@deepseek-ai/dsh-client-locale": ^0.1.5-rc.1
-    "@deepseek-ai/dsh-client-ui-layout": ^0.1.5-rc.1
-    "@deepseek-ai/dsh-client-ui-renderer": ^0.1.5-rc.1
-    "@deepseek-ai/dsh-client-ui-settings": ^0.1.5-rc.1
-    "@deepseek-ai/dsh-client-ui-slots": ^0.1.5-rc.1
-    react: ^18.2.0
-    react-dom: ^18.2.0
-  peerDependenciesMeta:
-    "@deepseek-ai/cordis":
-      optional: true
-    "@deepseek-ai/dsh-client-connection":
-      optional: true
-    "@deepseek-ai/dsh-client-locale":
-      optional: true
-    "@deepseek-ai/dsh-client-ui-layout":
-      optional: true
-    "@deepseek-ai/dsh-client-ui-renderer":
-      optional: true
-    "@deepseek-ai/dsh-client-ui-settings":
-      optional: true
-    "@deepseek-ai/dsh-client-ui-slots":
-      optional: true
-  languageName: unknown
-  linkType: soft
-
 "qnovel-plugins@workspace:.":
   version: 0.0.0-use.local
   resolution: "qnovel-plugins@workspace:."
-  languageName: unknown
-  linkType: soft
-
-"qnovel-screenplay@workspace:packages/qnovel-screenplay":
-  version: 0.0.0-use.local
-  resolution: "qnovel-screenplay@workspace:packages/qnovel-screenplay"
-  dependencies:
-    "@deepseek-ai/cordis": "npm:4.0.2"
-    "@types/node": "npm:^22.20.0"
-    tsdown: "npm:^0.22.2"
-    typescript: "npm:^5.9.3"
-  peerDependencies:
-    "@deepseek-ai/cordis": ^4.0.2
-  peerDependenciesMeta:
-    "@deepseek-ai/cordis":
-      optional: true
   languageName: unknown
   linkType: soft
 
@@ -1006,6 +953,72 @@ __metadata:
   checksum: 10c0/0cc1b55796dd420840a70a5a01c314b4a1967ac0458141d6877c08268e8343b43e7bbc217e58d13613fc9d22efb3dccd7ff1fcfce0c62902be67d346a7eb76df
   languageName: node
   linkType: hard
+
+"zenwit-plugin-mochi@workspace:packages/zenwit-plugin-mochi":
+  version: 0.0.0-use.local
+  resolution: "zenwit-plugin-mochi@workspace:packages/zenwit-plugin-mochi"
+  dependencies:
+    "@deepseek-ai/cordis": "npm:4.0.2"
+    "@deepseek-ai/dsh-client-connection": "npm:0.1.5-rc.1"
+    "@deepseek-ai/dsh-client-locale": "npm:0.1.5-rc.1"
+    "@deepseek-ai/dsh-client-ui-layout": "npm:0.1.5-rc.1"
+    "@deepseek-ai/dsh-client-ui-renderer": "npm:0.1.5-rc.1"
+    "@deepseek-ai/dsh-client-ui-settings": "npm:0.1.5-rc.1"
+    "@deepseek-ai/dsh-client-ui-slots": "npm:0.1.5-rc.1"
+    "@types/node": "npm:^22.20.0"
+    "@types/react": "npm:^18.3.1"
+    "@types/react-dom": "npm:^18.3.1"
+    react: "npm:18.3.1"
+    react-dom: "npm:18.3.1"
+    tsdown: "npm:^0.22.2"
+    typescript: "npm:^5.9.3"
+  peerDependencies:
+    "@deepseek-ai/cordis": ^4.0.2
+    "@deepseek-ai/dsh-client-connection": ^0.1.5-rc.1
+    "@deepseek-ai/dsh-client-locale": ^0.1.5-rc.1
+    "@deepseek-ai/dsh-client-ui-layout": ^0.1.5-rc.1
+    "@deepseek-ai/dsh-client-ui-renderer": ^0.1.5-rc.1
+    "@deepseek-ai/dsh-client-ui-settings": ^0.1.5-rc.1
+    "@deepseek-ai/dsh-client-ui-slots": ^0.1.5-rc.1
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  peerDependenciesMeta:
+    "@deepseek-ai/cordis":
+      optional: true
+    "@deepseek-ai/dsh-client-connection":
+      optional: true
+    "@deepseek-ai/dsh-client-locale":
+      optional: true
+    "@deepseek-ai/dsh-client-ui-layout":
+      optional: true
+    "@deepseek-ai/dsh-client-ui-renderer":
+      optional: true
+    "@deepseek-ai/dsh-client-ui-settings":
+      optional: true
+    "@deepseek-ai/dsh-client-ui-slots":
+      optional: true
+  languageName: unknown
+  linkType: soft
+
+"zenwit-plugin-screenplay@workspace:packages/zenwit-plugin-screenplay":
+  version: 0.0.0-use.local
+  resolution: "zenwit-plugin-screenplay@workspace:packages/zenwit-plugin-screenplay"
+  dependencies:
+    "@deepseek-ai/cordis": "npm:4.0.2"
+    "@deepseek-ai/dsh-home-paths": "npm:0.1.5-rc.1"
+    "@types/node": "npm:^22.20.0"
+    tsdown: "npm:^0.22.2"
+    typescript: "npm:^5.9.3"
+  peerDependencies:
+    "@deepseek-ai/cordis": ^4.0.2
+    "@deepseek-ai/dsh-home-paths": ^0.1.5-rc.1
+  peerDependenciesMeta:
+    "@deepseek-ai/cordis":
+      optional: true
+    "@deepseek-ai/dsh-home-paths":
+      optional: true
+  languageName: unknown
+  linkType: soft
 
 "zod@npm:^4.4.3":
   version: 4.4.3

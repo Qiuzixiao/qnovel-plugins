@@ -1,0 +1,74 @@
+{
+  "name": "zenwit-plugin-screenplay",
+  "version": "0.1.0",
+  "description": "短剧创作：以情绪账务引擎为方法论内核，从立项选题、人物骨架、分集大纲、正文写作到付费卡点、改稿验收与交付的完整短剧创作流水线。",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Qiuzixiao/qnovel-plugins.git",
+    "directory": "packages/zenwit-plugin-screenplay"
+  },
+  "homepage": "https://github.com/Qiuzixiao/qnovel-plugins/tree/main/packages/zenwit-plugin-screenplay",
+  "keywords": [
+    "zenwit",
+    "screenplay",
+    "short-drama",
+    "agent-preset"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "cordis.patch.yml",
+    "lib/**/*.js",
+    "lib/**/*.map",
+    "lib/types/**/*.d.ts",
+    "presets/**",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "scripts": {
+    "build": "tsdown && tsc -p tsconfig.json --emitDeclarationOnly",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --test tests/*.spec.mjs",
+    "check": "yarn run build && yarn run typecheck && yarn run test"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-home-paths": "^0.1.5-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-home-paths": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.0.2",
+    "@deepseek-ai/dsh-home-paths": "0.1.5-rc.1",
+    "@types/node": "^22.20.0",
+    "tsdown": "^0.22.2",
+    "typescript": "^5.9.3"
+  }
+}
