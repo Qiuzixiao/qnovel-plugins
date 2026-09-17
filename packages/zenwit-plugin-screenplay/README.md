@@ -35,15 +35,13 @@
 corepack yarn workspace zenwit-plugin-screenplay check   # 构建 + 类型检查 + 单元测试
 ```
 
-发布前用真实内核校验组合配置（缺必填字段会在挂载预设时才报错，这一步能提前发现）：
+发布前校验派生结果：与上游行集合对比 + 用真实内核 schema 逐行校验配置（缺必填字段只会在挂载预设时报错，这一步能提前发现）：
 
 ```bash
 ZENWIT_KERNEL_MODULES=<内核 node_modules 路径> yarn workspace zenwit-plugin-screenplay verify:composition
 ```
 
-预设资产（技能、参数表、自检脚本）在 `presets/zenwit-plugin-screenplay/`；`agent.cordis.yml` 由 `src/index.ts` 在安装时从运行时标准预设派生，不要再手工维护一份副本。
-
-原有内容：预设内容在 `presets/zenwit-plugin-screenplay/`——技能、参数表与自检脚本都是纯文件，改完即生效；预设组合由 `src/index.ts` 的 `composition()` 生成，路径按实际安装位置写入，所以包放在哪都能用。
+预设资产（技能、参数表、自检脚本）在 `presets/zenwit-plugin-screenplay/`——纯文件，改完即生效。`agent.cordis.yml` 不随包提供：`src/index.ts` 在安装时从运行时标准预设派生它，只改 persona 文案与技能目录两处，路径按实际安装位置写入。
 
 ## License
 
